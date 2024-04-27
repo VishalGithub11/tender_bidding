@@ -18,6 +18,10 @@ const BidSchema = new mongoose.Schema({
     time: {
         type: Date,
         default: Date.now()
+    },
+    isBidPlacedInLast5Min: {
+        type: Boolean,
+        default: false,
     }
 });
 
