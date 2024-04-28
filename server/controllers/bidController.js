@@ -1,5 +1,3 @@
-
-
 const Bid = require('../models/Bid');
 const Tender = require('../models/Tender');
 
@@ -25,26 +23,27 @@ exports.createBid = async (req, res) => {
         if (time < tenderDetails.startTime || time > tenderDetails.endTime) {
             return res.status(400).json({ message: 'Bid time must be within tender start and end time' });
         }
-        const endTime = new Date(tenderDetails.endTime);
-        console.log("endTime", endTime);
-        // Check if bid time is within 5 minutes of tender end time
-        if (time >= endTime - 5 * 60 * 1000 && time <= endTime) {
-            // If bid is placed within the last 5 minutes, extend tender end time
-            tenderDetails.endTime = new Date(endTime.getTime() + tenderDetails.bufferTime * 60 * 1000);
-            console.log("updayed time",tenderDetails.endTime);
-            tenderDetails.isTimeExtended = true;
-            await tenderDetails.save();
-            addBid({isBidPlacedInLast5Min:true})
-        }else{
-            addBid({isBidPlacedInLast5Min:false})
-        }
 
         const addBid = async ({isBidPlacedInLast5Min})=>{
+            // console.log("isBidPlacedInLast5Min",isBidPlacedInLast5Min);
             const bid = new Bid({ user: req.userId, price, tender, isBidPlacedInLast5Min });
             await bid.save();
            return res.json(bid);
         }
-       
+
+        const endTime = new Date(tenderDetails.endTime);
+        // Check if bid time is within 5 minutes of tender end time
+        if (time >= endTime - 5 * 60 * 1000 && time <= endTime) {
+            // If bid is placed within the last 5 minutes, extend tender end time
+            const newEndTime = new Date(endTime.getTime() + tenderDetails.bufferTimeInMinutes * 60 * 1000);
+            tenderDetails.endTime = newEndTime
+            tenderDetails.isTimeExtended = true;
+            await tenderDetails.save();
+            
+            addBid({isBidPlacedInLast5Min:true})
+        }else{
+            addBid({isBidPlacedInLast5Min:false})
+        }     
     } catch (err) {
         res.status(500).json({ message: err.message });
     }

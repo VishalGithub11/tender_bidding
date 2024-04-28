@@ -11,7 +11,7 @@ const Signup = () => {
 
   const [loading, setLoading] = useState(false)
   const [successMsg, setSuccessMsg] = useState("")
-
+  
   const [errors, setErrors] = useState({
     name: '',
     email: '',

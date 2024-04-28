@@ -1,7 +1,7 @@
 "use client"
 import React, { useState } from 'react';
 
-const BidForm = ({ tenderId}) => {
+const BidForm = ({ tenderId, setBidResponse}) => {
   const [price, setPrice] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -28,7 +28,8 @@ const BidForm = ({ tenderId}) => {
         const errorData = await response.json();
         throw new Error(errorData.message || 'Something went wrong');
       }
-
+      const responseData = await response.json()
+      setBidResponse(responseData)
      
     } catch (error) {
       setError(error.message);

@@ -92,13 +92,10 @@ const CreateTender = () => {
             },
             body: JSON.stringify(formData),
           });
-  
           const data = await response.json();
-  
           if (!response.ok) {
             throw new Error(data.message || 'Something went wrong');
           }
-  
           setSuccessMsg("Tender created successfully");
           setFormData({
             name: "",
@@ -107,6 +104,7 @@ const CreateTender = () => {
             endTime: "",
             bufferTimeInMinutes: "",
           });
+          router.push("/")
         } catch (error) {
           setErrorMsg(error.message);
         } finally {

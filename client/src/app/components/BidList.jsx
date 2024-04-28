@@ -39,7 +39,7 @@ const BidList = ({ bids }) => {
                                 {new Date(bid.time).toLocaleString()}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap">
-                                ${bid.price}
+                                {bid.isBidPlacedInLast5Min ? "YES" : "NO"}
                             </td>
                         </tr>
                     ))}

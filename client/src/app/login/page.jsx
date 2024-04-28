@@ -1,5 +1,5 @@
 "use client"
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation'
 import { useUser } from '@/context/UserContext';
 
@@ -7,6 +7,13 @@ const Login = () => {
   const router = useRouter();
   const { user, setUser } = useUser();
 
+  //redirect to homeif user already logged in
+  useEffect(() => {
+    if (user && user.name) {
+      router.push("/");
+    }
+  }, [user]);
+  
 
   const [formData, setFormData] = useState({
     email: '',
